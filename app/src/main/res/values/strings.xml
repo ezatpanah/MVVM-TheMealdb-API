@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MVVM-TheMealdb-API</string>
+
+    <string name="search">Search...</string>
+    <string name="checkInternet">Please Check Your Connection</string>
+    <string name="emptyList">List is empty</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="measure">Measure</string>
+
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
