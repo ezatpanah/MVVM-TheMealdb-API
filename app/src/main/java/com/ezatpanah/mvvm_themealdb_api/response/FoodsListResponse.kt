@@ -3,10 +3,7 @@ package com.ezatpanah.mvvm_themealdb_api.response
 import com.google.gson.annotations.SerializedName
 
 
-data class FoodsListResponse(
-    @SerializedName("meals")
-    val meals: List<Meal>
-) {
+class FoodsListResponse : ArrayList<FoodsListResponse.Meal>() {
     data class Meal(
         @SerializedName("dateModified")
         val dateModified: Any?, // null
