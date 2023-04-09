@@ -26,7 +26,7 @@ interface ApiServices {
      **/
 
     @GET("random.php")
-     suspend fun getFoodRandom() : Response<FoodsListResponse.Meal>
+     suspend fun getFoodRandom() : Response<FoodsListResponse>
 
     @GET("categories.php")
     suspend fun getCategoriesList() : Response<CategoriesListResponse>

@@ -2,23 +2,17 @@ package com.ezatpanah.mvvm_themealdb_api.response
 
 import com.google.gson.annotations.SerializedName
 
-
-class FoodsListResponse : ArrayList<FoodsListResponse.Meal>() {
+data class FoodsListResponse(
+    @SerializedName("meals")
+    val meals: List<Meal>?
+) {
     data class Meal(
-        @SerializedName("dateModified")
-        val dateModified: Any?, // null
         @SerializedName("idMeal")
         val idMeal: String?, // 53052
         @SerializedName("strArea")
         val strArea: String?, // Malaysian
         @SerializedName("strCategory")
         val strCategory: String?, // Beef
-        @SerializedName("strCreativeCommonsConfirmed")
-        val strCreativeCommonsConfirmed: Any?, // null
-        @SerializedName("strDrinkAlternate")
-        val strDrinkAlternate: Any?, // null
-        @SerializedName("strImageSource")
-        val strImageSource: Any?, // null
         @SerializedName("strIngredient1")
         val strIngredient1: String?, // Minced Beef
         @SerializedName("strIngredient10")
@@ -107,8 +101,6 @@ class FoodsListResponse : ArrayList<FoodsListResponse.Meal>() {
         val strMeasure9: String?,
         @SerializedName("strSource")
         val strSource: String?, // https://www.196flavors.com/malaysia-roti-john/
-        @SerializedName("strTags")
-        val strTags: Any?, // null
         @SerializedName("strYoutube")
         val strYoutube: String? // https://www.youtube.com/watch?v=cl4YH8wblRs
     )
