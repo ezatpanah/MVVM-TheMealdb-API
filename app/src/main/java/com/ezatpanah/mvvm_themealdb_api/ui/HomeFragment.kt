@@ -5,19 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.ezatpanah.mvvm_themealdb_api.R
 import com.ezatpanah.mvvm_themealdb_api.adapter.CategoriesAdapter
 import com.ezatpanah.mvvm_themealdb_api.adapter.FoodsAdapter
 import com.ezatpanah.mvvm_themealdb_api.databinding.FragmentHomeBinding
-import com.ezatpanah.mvvm_themealdb_api.utils.DataStatus
-import com.ezatpanah.mvvm_themealdb_api.utils.isVisible
-import com.ezatpanah.mvvm_themealdb_api.utils.setupListWithAdapter
-import com.ezatpanah.mvvm_themealdb_api.utils.setupRecyclerView
+import com.ezatpanah.mvvm_themealdb_api.utils.*
 import com.ezatpanah.mvvm_themealdb_api.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,6 +36,8 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var foodsAdapter: FoodsAdapter
 
+    @Inject
+    lateinit var connection: CheckConnection
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +46,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(layoutInflater)
         return binding.root
     }
+
+    enum class PageState { EMPTY, NETWORK, NONE }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +64,7 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
+
                 //Filters
                 viewModel.loadFilterList()
                 viewModel.filtersListData.observe(viewLifecycleOwner) {
@@ -67,6 +72,7 @@ class HomeFragment : Fragment() {
                         Toast.makeText(requireContext(), letter, Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 //Categories
                 viewModel.getCategoriesList()
                 viewModel.categoriesList.observe(viewLifecycleOwner) {
@@ -88,6 +94,10 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
+                categoriesAdapter.setOnItemClickListener {
+                    viewModel.getFoodByCategory(it.strCategory.toString())
+                }
+
                 //Foods
                 viewModel.getFoodsList("A")
                 viewModel.foodList.observe(viewLifecycleOwner) {
@@ -97,11 +107,18 @@ class HomeFragment : Fragment() {
                         }
                         DataStatus.Status.SUCCESS -> {
                             homeFoodsLoading.isVisible(false, foodsList)
-                            foodsAdapter.setData(it.data!!.meals!!)
-                            foodsList.setupRecyclerView(
-                                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false),
-                                foodsAdapter
-                            )
+                            if (it.data!!.meals != null) {
+                                if (it.data.meals!!.isNotEmpty()) {
+                                    checkConnectionOrEmpty(false, PageState.NONE)
+                                    foodsAdapter.setData(it.data.meals)
+                                    foodsList.setupRecyclerView(
+                                        LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false),
+                                        foodsAdapter
+                                    )
+                                }
+                            } else {
+                                checkConnectionOrEmpty(true, PageState.EMPTY)
+                            }
                         }
                         DataStatus.Status.ERROR -> {
                             homeFoodsLoading.isVisible(false, foodsList)
@@ -109,8 +126,53 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-            }
 
+                foodsAdapter.setOnItemClickListener {
+                    val direction = HomeFragmentDirections.actionHomeToDetail(it.idMeal!!.toInt())
+                    findNavController().navigate(direction)
+                }
+
+                //Search
+                searchEdt.addTextChangedListener {
+                    if (it.toString().length > 2) {
+                        viewModel.getFoodBySearch(it.toString())
+                    }
+                }
+
+                //Internet
+                connection.observe(viewLifecycleOwner) {
+                    if (it) {
+                        checkConnectionOrEmpty(false, PageState.NONE)
+                    } else {
+                        checkConnectionOrEmpty(true, PageState.NETWORK)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkConnectionOrEmpty(isShownError: Boolean, state: PageState) {
+        binding?.apply {
+            if (isShownError) {
+                homeDisLay.isVisible(true, homeContent)
+                when (state) {
+                    PageState.EMPTY -> {
+                        homeContent.visibility = View.GONE
+                        homeDisLay.visibility = View.VISIBLE
+                        disconnectLay.imgDisconnect.setAnimation(R.raw.empty)
+                        disconnectLay.imgDisconnect.playAnimation()
+                    }
+                    PageState.NETWORK -> {
+                        homeContent.visibility = View.GONE
+                        homeDisLay.visibility = View.VISIBLE
+                        disconnectLay.imgDisconnect.setAnimation(R.raw.nointernet)
+                        disconnectLay.imgDisconnect.playAnimation()
+                    }
+                    else -> {}
+                }
+            } else {
+                homeDisLay.isVisible(false, homeContent)
+            }
         }
     }
 

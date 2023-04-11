@@ -2,10 +2,14 @@ package com.ezatpanah.mvvm_themealdb_api.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.ezatpanah.mvvm_themealdb_api.R
 import com.ezatpanah.mvvm_themealdb_api.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -20,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         navHost = supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
+
 
     }
 

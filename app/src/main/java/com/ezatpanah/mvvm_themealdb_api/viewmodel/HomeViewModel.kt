@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.ezatpanah.mvvm_themealdb_api.repository.ApiRepository
+import com.ezatpanah.mvvm_themealdb_api.repository.MainRepository
 import com.ezatpanah.mvvm_themealdb_api.response.CategoriesListResponse
 import com.ezatpanah.mvvm_themealdb_api.response.FoodsListResponse
 import com.ezatpanah.mvvm_themealdb_api.utils.DataStatus
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel
 @Inject constructor(
-    private val repository: ApiRepository,
+    private val repository: MainRepository,
     application: Application,
 ) : AndroidViewModel(application) {
 
@@ -56,6 +56,14 @@ class HomeViewModel
         repository.getFoodsList(letter).collect {
             _foodList.value = it
         }
+    }
+
+    fun getFoodBySearch(letter: String) = viewModelScope.launch {
+        repository.getFoodsBySearch(letter).collect {  _foodList.value = it }
+    }
+
+    fun getFoodByCategory(letter: String) = viewModelScope.launch {
+        repository.getFoodsByCategory(letter).collect {  _foodList.value = it }
     }
 
 
