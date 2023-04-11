@@ -29,7 +29,7 @@ class MainRepository @Inject constructor(private val apiServices: ApiServices, p
             //Response
             when (apiServices.getCategoriesList().code()) {
                 in 200..202 -> {
-                    emit(DataStatus.success(apiServices.getCategoriesList().body(), it.isEmpty()))
+                    emit(DataStatus.success(apiServices.getCategoriesList().body()))
                 }
                 422 -> {
                     emit(DataStatus.error(""))
@@ -50,7 +50,7 @@ class MainRepository @Inject constructor(private val apiServices: ApiServices, p
             emit(DataStatus.loading())
             when (apiServices.getFoodList(letter).code()) {
                 in 200..202 -> {
-                    emit(DataStatus.success(apiServices.getFoodList(letter).body(), it.isEmpty()))
+                    emit(DataStatus.success(apiServices.getFoodList(letter).body()))
                 }
             }
         }.catch { emit(DataStatus.error(it.message.toString())) }
@@ -62,7 +62,7 @@ class MainRepository @Inject constructor(private val apiServices: ApiServices, p
             emit(DataStatus.loading())
             when (apiServices.searchList(letter).code()) {
                 in 200..202 -> {
-                    emit(DataStatus.success(apiServices.searchList(letter).body(), it.isEmpty()))
+                    emit(DataStatus.success(apiServices.searchList(letter).body()))
                 }
             }
         }.catch { emit(DataStatus.error(it.message.toString())) }
@@ -74,7 +74,7 @@ class MainRepository @Inject constructor(private val apiServices: ApiServices, p
             emit(DataStatus.loading())
             when (apiServices.filterList(letter).code()) {
                 in 200..202 -> {
-                    emit(DataStatus.success(apiServices.filterList(letter).body(), it.isEmpty()))
+                    emit(DataStatus.success(apiServices.filterList(letter).body()))
                 }
             }
         }.catch { emit(DataStatus.error(it.message.toString())) }
@@ -88,7 +88,7 @@ class MainRepository @Inject constructor(private val apiServices: ApiServices, p
             emit(DataStatus.loading())
             when (apiServices.getFoodDetails(id).code()) {
                 in 200..202 -> {
-                    emit(DataStatus.success(apiServices.getFoodDetails(id).body(), it.isEmpty()))
+                    emit(DataStatus.success(apiServices.getFoodDetails(id).body()))
                 }
             }
         }.catch { emit(DataStatus.error(it.message.toString())) }

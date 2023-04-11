@@ -21,7 +21,7 @@ class FavoriteViewModel @Inject constructor(private val repository: MainReposito
 
     fun getFavoritesFoodList() = viewModelScope.launch {
         repository.getDbFoodList().collect {
-            _foodList.value=DataStatus.success(it, it.isEmpty())
+            _foodList.value=DataStatus.success(it)
         }
     }
 }
