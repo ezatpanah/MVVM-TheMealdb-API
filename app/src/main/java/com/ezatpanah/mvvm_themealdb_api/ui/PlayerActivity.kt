@@ -7,12 +7,12 @@ import com.ezatpanah.mvvm_themealdb_api.R
 import com.ezatpanah.mvvm_themealdb_api.databinding.ActivityPlayerBinding
 import com.ezatpanah.mvvm_themealdb_api.utils.Constant.VIDEO_ID
 import com.ezatpanah.mvvm_themealdb_api.utils.Constant.YOUTUBE_API_KEY
+import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity : YouTubeBaseActivity() {
 
     private var _binding: ActivityPlayerBinding? = null
     private val binding get() = _binding!!
@@ -46,14 +46,14 @@ class PlayerActivity : AppCompatActivity() {
             }
 
         }
-
         binding.videoPlayer.initialize(YOUTUBE_API_KEY, listener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        player.release()
         _binding = null
+        //player.release()
     }
+
 
 }

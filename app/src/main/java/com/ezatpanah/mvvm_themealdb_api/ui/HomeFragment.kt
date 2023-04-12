@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
                 viewModel.loadFilterList()
                 viewModel.filtersListData.observe(viewLifecycleOwner) {
                     filterSpinner.setupListWithAdapter(it) { letter ->
-                        Toast.makeText(requireContext(), letter, Toast.LENGTH_SHORT).show()
+                        viewModel.getFoodsList(letter)
                     }
                 }
 
