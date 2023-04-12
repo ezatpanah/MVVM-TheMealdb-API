@@ -7,9 +7,9 @@ The purpose of this project series is to show different architectures with diffe
 
 This project in
 
-MVP architecture : https://github.com/ezatpanah/MVP-TheMealdb-API [ Room Database - Dagger Hilt - RxJava ]
-MVVM architecture : Current Repo
-MVI architecture : Coming soon
+- MVP architecture : https://github.com/ezatpanah/MVP-TheMealdb-API [ Room Database - Dagger Hilt - RxJava ]
+- MVVM architecture : Current Repo
+- MVI architecture : Coming soon
 
 The app was written in Kotlin.
 
