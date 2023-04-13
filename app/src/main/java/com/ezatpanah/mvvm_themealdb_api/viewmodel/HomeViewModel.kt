@@ -1,10 +1,7 @@
 package com.ezatpanah.mvvm_themealdb_api.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.ezatpanah.mvvm_themealdb_api.repository.MainRepository
 import com.ezatpanah.mvvm_themealdb_api.response.CategoriesListResponse
 import com.ezatpanah.mvvm_themealdb_api.response.FoodsListResponse
@@ -16,9 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel
 @Inject constructor(
-    private val repository: MainRepository,
-    application: Application,
-) : AndroidViewModel(application) {
+    private val repository: MainRepository
+) : ViewModel() {
 
     private val _randomFood: MutableLiveData<List<FoodsListResponse.Meal>> = MutableLiveData()
     val randomFood: LiveData<List<FoodsListResponse.Meal>>
